@@ -1,5 +1,4 @@
 
-
 int main() {
     symbol_table.count = 0;
 
@@ -18,5 +17,3 @@ int main() {
     return 0;
 
 }/*end of main*/
-
-
