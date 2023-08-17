@@ -2,8 +2,7 @@
 #define MAXIMUM_LINE_LENGTH 80
 #define MAXIMUM_LABEL_LENGTH 31
 #define MAX_SYMBOL_LENGTH 31
-
-
+#define SYMBOL_TYPE_DATA 'd'
 
 /*Lists of instructions and directives*/
 const char instruction[16][6] = {"mov", "cmp", "add", "sub", "not", "clr", "lea", "inc","jmp","bne","dec", "red","prn", "jsr", "rts", "stop"}; 
