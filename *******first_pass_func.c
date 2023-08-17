@@ -87,5 +87,77 @@ int is_alphanumeric(char* str) {
     return 1;
 }
 
+/*The following function checks if the symbol already exists in the table.*/
+int symbol_exists(char* symbol_name) {
+    Symbol* current = symbol_table;
+    while (current != NULL) {
+        if (strcmp(current->name, symbol_name) == 0) {
+            return 1;  /* true - symbol exists */
+        }
+        current = current->next;
+    }
+    return 0;  /* false - symbol doesn't exist */
+}
 
+/*The following function creates a limit on the address in memory*/
+void ensure_address_in_bounds(int address) {
+    if (address < 0 || address >= MEMORY_SIZE) {
+        handle_error("Address out of bounds");
+    }
+}
+
+
+/*The following function takes care of putting data into memory*/
+void memory_insert(int address, unsigned int value) {
+    ensure_address_in_bounds(address);
+    
+/*Check that the value is not too big for memory*/	
+    if (value >= (1 << WORD_SIZE)) {
+        handle_error("Value too large for memory word");
+    }
+    memory[address] = value;
+}
+
+/*The following function delimits the size of the data that goes into memory*/
+void ensure_data_in_bounds(int data) {
+    if (data < -(1 << (WORD_SIZE - 1)) || data >= (1 << (WORD_SIZE - 1))) {
+        handle_error("Data out of bounds for word size");
+    }
+}
+
+/*The following function is a function for inserting a whole data (even a third) into memory using the 2's complement method*/
+void memory_insert_int(int address, int data) {
+    ensure_data_in_bounds(data);
+    ensure_address_in_bounds(address);
+
+    if (data < 0) {
+        memory[address] = (1 << WORD_SIZE) + data; /*Converting to 2's complement*/
+    } else {
+        memory[address] = data;
+    }
+}
+
+/*function to insert a character into memory (when the character is ASCII)*/
+void memory_insert_char(int address, char ch) {
+    ensure_address_in_bounds(address);
+    memory[address] = ch;
+}
+
+
+/*As we mentioned above, we used the algorithm in the course booklet.
+ The following function provides an answer to the ninth step and checks whether it is an .extern directive*/
+void handle_instruction(char* field, char* operands) {
+    char instruction_type = process_field(field);
+
+    /* If the directive is ".extern" */
+    if (instruction_type == 'e') {
+        char* token = strtok(operands, " \t,");
+        while (token != NULL) {
+            /* Add the symbol to the symbol table */
+            insert_symbol(token, 0, 'E');
+            token = strtok(NULL, " \t,");
+        }
+    }
+    /*TODO: Additional checks for other types of instructions can be added here if needed*/
+}
 
