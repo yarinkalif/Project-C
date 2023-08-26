@@ -3,9 +3,15 @@
 #include <string.h>
 #include "table.h"
 
-
-
-/*this function creats the linked list*/
+/**
+ * @brief Creates a new macro table (linked list).
+ *
+ * This function initializes a new macro table structure, which is 
+ * essentially a linked list of macro entries. 
+ *
+ * @return A pointer to the newly created macro table, or NULL if 
+ * memory allocation fails.
+ */
 macro_table *create_macro_table() {
 	macro_table *table = (macro_table*)malloc(sizeof(macro_table));
 	if (table == NULL){ /*check if the memory allocation successed*/
@@ -15,7 +21,16 @@ macro_table *create_macro_table() {
 	return table;
 }
 
-/*this function adds new macro to the table by using linked list*/
+/**
+ * @brief Adds a new macro to the macro table.
+ * 
+ * This function creates a new macro entry with the given name and 
+ * content, then prepends it to the provided macro table's linked list.
+ *
+ * @param table The macro table to which the new macro will be added.
+ * @param name The name of the new macro.
+ * @param content The content of the new macro.
+ */
 void add_macro_to_table(macro_table *table, char *name, char *content) {
 	macro *newMacro = (macro*) malloc(sizeof(macro)); /*create new space in the table for new macro*/
 
@@ -27,7 +42,18 @@ void add_macro_to_table(macro_table *table, char *name, char *content) {
 	table->head = newMacro;
 }
 
-/*this function replace macro name with his content*/
+/**
+ * @brief Replaces macro names in a given line with their content.
+ *
+ * This function searches for macro names in the provided line 
+ * and replaces them with the content of the macro (if found 
+ * in the macro table).
+ *
+ * @param line The line of code to search and replace macros in.
+ * @param table The macro table containing defined macros.
+ * @return A new string with macros expanded, or the original 
+ * line if no macros were found. Returns NULL if memory allocation fails.
+ */
 char *expend_macro(char *line, macro_table *table) {
 	macro *curr = table->head; /*pointed to the head of the linked list*/
 	char *expendLine = (char *)malloc(MAX_LENGTH_LINE + 2);
@@ -48,8 +74,14 @@ char *expend_macro(char *line, macro_table *table) {
 	return expendLine;
 }
 	
-
-/*this function free the memory used to the macro table*/
+/**
+ * @brief Frees all memory used by the macro table.
+ *
+ * This function deallocates memory used by the macro table 
+ * and all its entries.
+ *
+ * @param table The macro table to be freed.
+ */
 void free_macro_table(macro_table *table) {
 	macro *curr = table->head;
 	while (curr != NULL) {
@@ -60,6 +92,15 @@ void free_macro_table(macro_table *table) {
 		free(temp);
 	}
 }
+
+/**
+ * @brief Creates a new symbol table.
+ *
+ * This function initializes a new symbol table structure with 
+ * predefined table size. Each entry is initialized to NULL.
+ *
+ * @return A pointer to the newly created symbol table.
+ */
 
 s_table *create_symbol_table() {
 	int i=0;
